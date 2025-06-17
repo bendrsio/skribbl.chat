@@ -53,7 +53,7 @@ export function UserSetup({ onJoin }: UserSetupProps) {
     <div className="flex min-h-dvh items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Join Chat Room</CardTitle>
+          <CardTitle className="text-2xl">Skribbl.chat</CardTitle>
           <CardDescription>
             Pick your name and color to get started
           </CardDescription>
@@ -68,7 +68,7 @@ export function UserSetup({ onJoin }: UserSetupProps) {
                 placeholder="Enter your name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                maxLength={20}
+                maxLength={10}
                 required
               />
             </div>
