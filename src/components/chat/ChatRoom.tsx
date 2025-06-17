@@ -39,7 +39,7 @@ export function ChatRoom({
   }, [messages]);
 
   return (
-    <div className="flex h-screen flex-col bg-background">
+    <div className="flex h-dvh flex-col bg-background">
       {/* Header */}
       <div className="flex items-center justify-between gap-2 border-b p-4">
         <div className="flex items-center gap-3">
