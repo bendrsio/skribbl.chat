@@ -7,7 +7,14 @@ import { Message } from "./Message";
 import { MessageInput } from "./MessageInput";
 import { UserList } from "./UserList";
 import { User, Message as MessageType } from "@/types/chat";
-import { LogOut } from "lucide-react";
+import { LogOut, Users as UsersIcon } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 interface ChatRoomProps {
   currentUser: User;
@@ -32,67 +39,97 @@ export function ChatRoom({
   }, [messages]);
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="flex h-dvh flex-col bg-background">
       {/* Header */}
-      <div className="border-b p-4 flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2 border-b p-4">
         <div className="flex items-center gap-3">
           <div
-            className="w-4 h-4 rounded-full"
+            className="h-4 w-4 shrink-0 rounded-full"
             style={{ backgroundColor: currentUser.color }}
           />
-          <h1 className="text-xl font-semibold">Chat Room</h1>
+          <h1 className="truncate text-xl font-semibold">Chat Room</h1>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onLeaveRoom}
-          className="flex items-center gap-2"
-        >
-          <LogOut className="h-4 w-4" />
-          Leave
-        </Button>
+
+        <div className="flex items-center gap-2">
+          {/* Mobile User List Sheet */}
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <UsersIcon className="h-5 w-5" />
+                  <span className="sr-only">View users</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="w-64 p-0">
+                <SheetHeader className="border-b p-4 text-left">
+                  <SheetTitle className="flex items-center gap-2">
+                    <UsersIcon className="h-5 w-5" />
+                    Online ({users.length})
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="overflow-y-auto p-2">
+                  <UserList users={users} currentUserId={currentUser.id} />
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onLeaveRoom}
+            className="flex items-center gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            <span className="hidden sm:inline">Leave</span>
+          </Button>
+        </div>
       </div>
 
       {/* Main content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex flex-1 overflow-hidden">
         {/* Chat area */}
-        <div className="flex-1 flex flex-col">
-          <Card className="flex-1 rounded-none border-0 border-r">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Messages</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 overflow-hidden flex flex-col pt-0">
-              {/* Messages container */}
-              <div className="flex-1 overflow-y-auto pr-2 space-y-1">
-                {messages.length === 0 ? (
-                  <div className="flex items-center justify-center h-full">
-                    <p className="text-muted-foreground text-center">
-                      No messages yet. Start the conversation!
-                    </p>
-                  </div>
-                ) : (
-                  <>
-                    {messages.map((message) => (
-                      <Message
-                        key={message.id}
-                        message={message}
-                        isOwnMessage={message.userId === currentUser.id}
-                      />
-                    ))}
-                    <div ref={messagesEndRef} />
-                  </>
-                )}
+        <div className="flex flex-1 flex-col">
+          <div className="flex-1 space-y-1 overflow-y-auto p-4">
+            {messages.length === 0 ? (
+              <div className="flex h-full items-center justify-center">
+                <p className="text-center text-muted-foreground">
+                  No messages yet. Start the conversation!
+                </p>
               </div>
-            </CardContent>
-          </Card>
+            ) : (
+              <>
+                {messages.map((message) => (
+                  <Message
+                    key={message.id}
+                    message={message}
+                    isOwnMessage={message.userId === currentUser.id}
+                  />
+                ))}
+                <div ref={messagesEndRef} />
+              </>
+            )}
+          </div>
 
           {/* Message input */}
-          <MessageInput onSendMessage={onSendMessage} />
+          <div className="p-4">
+            <MessageInput onSendMessage={onSendMessage} />
+          </div>
         </div>
 
-        {/* Sidebar with user list */}
-        <div className="w-72 p-4">
-          <UserList users={users} currentUserId={currentUser.id} />
+        {/* Desktop Sidebar with user list */}
+        <div className="hidden w-72 border-l md:block">
+          <Card className="flex h-full flex-col rounded-none border-0">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <UsersIcon className="h-5 w-5" />
+                Online ({users.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 overflow-y-auto pt-0">
+              <UserList users={users} currentUserId={currentUser.id} />
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

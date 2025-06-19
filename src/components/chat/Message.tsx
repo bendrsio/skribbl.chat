@@ -1,20 +1,26 @@
 "use client";
 
 import { Message as MessageType } from "@/types/chat";
-import { cn } from "@/lib/utils";
 
 interface MessageProps {
   message: MessageType;
   isOwnMessage: boolean;
 }
 
-export function Message({ message, isOwnMessage }: MessageProps) {
-  const formatTime = (timestamp: Date) => {
-    return new Intl.DateTimeFormat("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    }).format(timestamp);
+export function Message({ message }: MessageProps) {
+  const hexToRgba = (hex: string, alpha: number) => {
+    hex = hex.replace(/^#/, "");
+    if (hex.length === 3) {
+      hex = hex
+        .split("")
+        .map((char) => char + char)
+        .join("");
+    }
+    const bigint = parseInt(hex, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
 
   if (message.type === "system") {
@@ -27,43 +33,31 @@ export function Message({ message, isOwnMessage }: MessageProps) {
     );
   }
 
+  const userColor = message.userColor || "#000000";
+  const userNameBg = hexToRgba(userColor, 0.33);
+
   return (
-    <div
-      className={cn(
-        "flex w-full mb-4",
-        isOwnMessage ? "justify-end" : "justify-start"
-      )}
-    >
+    <div className="w-full mb-4">
       <div
-        className={cn(
-          "max-w-[70%] rounded-lg p-3 break-words",
-          isOwnMessage ? "bg-primary text-primary-foreground" : "bg-muted"
-        )}
+        className="flex rounded-lg bg-white border-2"
+        style={{ borderColor: userColor }}
       >
-        {!isOwnMessage && (
-          <div className="flex items-center gap-2 mb-1">
-            <div
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: message.userColor }}
-            />
-            <span
-              className="text-sm font-medium"
-              style={{ color: message.userColor }}
-            >
-              {message.userName}
-            </span>
-          </div>
-        )}
-
-        <div className="text-sm leading-relaxed">{message.content}</div>
-
         <div
-          className={cn(
-            "text-xs mt-1 opacity-70",
-            isOwnMessage ? "text-right" : "text-left"
-          )}
+          className="flex w-32 flex-shrink-0 items-center justify-center border-r-2"
+          style={{
+            backgroundColor: userNameBg,
+            borderRightColor: userColor,
+          }}
         >
-          {formatTime(message.timestamp)}
+          <span
+            className="truncate text-xs font-bold"
+            style={{ color: userColor }}
+          >
+            {message.userName}
+          </span>
+        </div>
+        <div className="flex-1 px-3 py-2 break-words">
+          <div className="text-sm leading-relaxed">{message.content}</div>
         </div>
       </div>
     </div>
