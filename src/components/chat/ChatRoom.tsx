@@ -113,7 +113,10 @@ export function ChatRoom({
 
           {/* Message input */}
           <div className="p-4">
-            <MessageInput onSendMessage={onSendMessage} />
+            <MessageInput
+              currentUser={currentUser}
+              onSendMessage={onSendMessage}
+            />
           </div>
         </div>
 
