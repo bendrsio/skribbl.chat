@@ -31,7 +31,7 @@ export function MessageCard({
   const userNameBg = hexToRgba(userColor, 0.33);
 
   return (
-    <div className="w-full">
+    <div className="inline-block max-w-full">
       <div
         className="flex rounded-lg bg-white border-2"
         style={{ borderColor: userColor }}
