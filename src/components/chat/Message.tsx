@@ -2,6 +2,7 @@
 
 import { Message as MessageType } from "@/types/chat";
 import { MessageCard } from "./MessageCard";
+import { CanvasMessage } from "./CanvasMessage";
 
 interface MessageProps {
   message: MessageType;
@@ -20,12 +21,12 @@ export function Message({ message }: MessageProps) {
   }
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 flex justify-center">
       <MessageCard
         userName={message.userName}
         userColor={message.userColor || "#000000"}
       >
-        <div className="text-sm leading-relaxed">{message.content}</div>
+        <CanvasMessage text={message.content} />
       </MessageCard>
     </div>
   );
