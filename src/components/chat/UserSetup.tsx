@@ -117,6 +117,9 @@ export function UserSetup({ onJoin }: UserSetupProps) {
               type="submit"
               className="w-full"
               disabled={!name.trim() || isLoading}
+              style={{
+                backgroundColor: selectedColor,
+              }}
             >
               {isLoading ? "Joining..." : "Join Chat Room"}
             </Button>

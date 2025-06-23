@@ -21,9 +21,9 @@ export function UserList({ users, currentUserId }: UserListProps) {
           />
           <span
             className={`truncate text-sm font-medium ${
-              user.id === currentUserId ? "font-bold text-primary" : ""
+              user.id === currentUserId ? "font-bold" : ""
             }`}
-            style={{ color: user.id !== currentUserId ? user.color : "" }}
+            style={{ color: user.color }}
           >
             {user.name}
             {user.id === currentUserId && " (You)"}
