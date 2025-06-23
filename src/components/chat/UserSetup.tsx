@@ -17,14 +17,18 @@ interface UserSetupProps {
 }
 
 const PRESET_COLORS = [
-  "#AF3029", // red-600
-  "#BC5215", // orange-600
-  "#AD8301", // yellow-600
-  "#66800B", // green-600
-  "#24837B", // cyan-600
-  "#205EA6", // blue-600
-  "#5E409D", // purple-600
-  "#A02F6F", // magenta-600
+  "#FF1717", // Red
+  "#FF9801", // Orange peel
+  "#F9E610", // Aureolin
+  "#8FE617", // Lawn green
+  "#40B569", // Emerald
+  "#59BDC5", // Verdigris
+  "#47A3FF", // Ruddy Blue
+  "#007AF5", // Azure
+  "#6344D1", // Iris
+  "#8431C4", // French violet
+  "#D770C7", // Orchid
+  "#000000", // Black
 ];
 
 export function UserSetup({ onJoin }: UserSetupProps) {
@@ -75,7 +79,7 @@ export function UserSetup({ onJoin }: UserSetupProps) {
 
             <div className="space-y-3">
               <Label>Choose Your Color</Label>
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-6 gap-3">
                 {PRESET_COLORS.map((color) => (
                   <button
                     key={color}
