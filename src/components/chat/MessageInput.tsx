@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { User } from "@/types/chat";
 import { MessageCard } from "./MessageCard";
-import { CanvasTextArea } from "./CanvasTextArea";
 import { MessageToolbar } from "./MessageToolbar";
 
 interface MessageInputProps {
@@ -28,14 +27,21 @@ export function MessageInput({
   return (
     <div className="flex flex-col items-center gap-2">
       <MessageCard userName={currentUser.name} userColor={currentUser.color}>
-        <CanvasTextArea
+        <textarea
           value={message}
-          onChange={setMessage}
-          width={400}
-          lineColor={currentUser.color}
-          cursorColor={currentUser.color}
-          showCursor
-          onEnter={handleSend}
+          onChange={(e) => setMessage(e.target.value)}
+          className="w-full resize-none bg-transparent outline-none"
+          style={{ width: 400, maxWidth: "100%" }}
+          rows={4}
+          wrap="soft"
+          maxLength={160}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
+          placeholder="Type a message"
         />
       </MessageCard>
       <MessageToolbar

@@ -2,7 +2,6 @@
 
 import { Message as MessageType } from "@/types/chat";
 import { MessageCard } from "./MessageCard";
-import { CanvasMessage } from "./CanvasMessage";
 
 interface MessageProps {
   message: MessageType;
@@ -26,7 +25,12 @@ export function Message({ message }: MessageProps) {
         userName={message.userName}
         userColor={message.userColor || "#000000"}
       >
-        <CanvasMessage text={message.content} />
+        <div
+          className="whitespace-pre-wrap break-words"
+          style={{ width: 400, maxWidth: "100%" }}
+        >
+          {message.content}
+        </div>
       </MessageCard>
     </div>
   );
