@@ -1,51 +1,54 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Send } from "lucide-react";
+import { User } from "@/types/chat";
+import { MessageCard } from "./MessageCard";
+import { MessageToolbar } from "./MessageToolbar";
 
 interface MessageInputProps {
+  currentUser: User;
   onSendMessage: (message: string) => void;
   disabled?: boolean;
 }
 
 export function MessageInput({
+  currentUser,
   onSendMessage,
   disabled = false,
 }: MessageInputProps) {
   const [message, setMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSend = () => {
     if (!message.trim() || disabled) return;
-
     onSendMessage(message.trim());
     setMessage("");
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 p-4 border-t">
-      <Input
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyPress={handleKeyPress}
-        placeholder="Type your message..."
-        disabled={disabled}
-        maxLength={500}
-        className="flex-1"
+    <div className="flex flex-col items-center gap-2">
+      <MessageCard userName={currentUser.name} userColor={currentUser.color}>
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="w-full resize-none bg-transparent outline-none"
+          style={{ width: 400, maxWidth: "100%" }}
+          rows={4}
+          wrap="soft"
+          maxLength={160}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
+          placeholder="Type a message"
+        />
+      </MessageCard>
+      <MessageToolbar
+        onSend={handleSend}
+        userColor={currentUser.color}
+        disabled={!message.trim() || disabled}
       />
-      <Button type="submit" size="icon" disabled={!message.trim() || disabled}>
-        <Send className="h-4 w-4" />
-        <span className="sr-only">Send message</span>
-      </Button>
-    </form>
+    </div>
   );
 }
